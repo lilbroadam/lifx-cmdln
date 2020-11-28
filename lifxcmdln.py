@@ -2,6 +2,8 @@ import requests
 import sys, getopt
 
 args = {}
+POWER = 'power'
+BRIGHTNESS = 'brightness'
 
 def print_light_names(lightsJson):
     LIGHT_NAME = 'label'
@@ -36,13 +38,20 @@ if __name__=="__main__":
     argv = sys.argv[1:]
     i = 0
     while i < len(argv):
-        if argv[i] == '-power':
+        arg = argv[i]
+
+        if arg == '-power':
             if argv[i + 1] != 'on' and argv[i + 1] != 'off':
                 print('Incorrect command line arguments')
                 sys.exit(2)
-            args['power'] = argv[i + 1]
+            args[POWER] = argv[i + 1]
             i += 1
-        
+        elif arg == '-brightness':
+            # TODO validate brightness param is (0, 1.0) 
+            args[BRIGHTNESS] = argv[i + 1]
+            i += 1
+
         i += 1
+        
 
     main()
