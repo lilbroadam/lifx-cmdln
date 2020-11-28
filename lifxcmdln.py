@@ -3,4 +3,6 @@ import requests
 tokenfile = open("lifxtoken.txt", "r")
 token = tokenfile.readline()
 
-print(token)
+response = requests.get('https://api.lifx.com/v1/lights/all', auth=(token, ''))
+
+print(response)
