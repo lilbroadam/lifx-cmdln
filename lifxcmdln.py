@@ -17,5 +17,11 @@ def main():
 
     print_light_names(light_list)
 
+    payload = {
+        "power": "on",
+    }
+
+    response = requests.put('https://api.lifx.com/v1/lights/all/state', data=payload, auth=(token, ''))
+
 if __name__=="__main__":
     main()
