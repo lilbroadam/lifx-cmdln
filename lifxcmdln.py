@@ -23,13 +23,13 @@ if __name__=="__main__":
     argv = sys.argv[1:]
     i = 0
     while i < len(argv):
-        if argv[i] == '-power':
+        if argv[i] == '-power' or argv[i] == '-p':
             if argv[i + 1] != 'on' and argv[i + 1] != 'off':
                 print('Incorrect command line arguments')
                 sys.exit(2)
             args[POWER] = argv[i + 1]
             i += 1
-        elif argv[i] == '-brightness':
+        elif argv[i] == '-brightness' or argv[i] == '-b':
             # TODO validate brightness param is (0, 1.0) 
             args[BRIGHTNESS] = argv[i + 1]
             i += 1
