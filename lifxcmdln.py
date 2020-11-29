@@ -3,15 +3,17 @@ import sys, getopt
 
 from lifxutil import *
 
+print_lights = False
 tokenfile = None
 args = {}
 
 def main():
     token = read_token(tokenfile)
 
-    response = requests.get('https://api.lifx.com/v1/lights/all', auth=(token, ''))
-    light_list = response.json()
-    print_light_names(light_list)
+    if print_lights:
+        response = requests.get('https://api.lifx.com/v1/lights/all', auth=(token, ''))
+        light_list = response.json()
+        print_light_names(light_list)
 
     payload = build_payload(args)
 
@@ -31,6 +33,8 @@ if __name__=="__main__":
             # TODO validate brightness param is (0, 1.0) 
             args[BRIGHTNESS] = argv[i + 1]
             i += 1
+        elif argv[i] == '--list-lights':
+            print_lights = True
         elif argv[i] == '--token-path':
             tokenfile = open(argv[i + 1], 'r')
             i += 1
