@@ -1,13 +1,13 @@
 import requests
 import sys, getopt
 
+tokenfile = None
 args = {}
+LIGHT_NAME = 'label'
 POWER = 'power'
 BRIGHTNESS = 'brightness'
 
 def print_light_names(lightsJson):
-    LIGHT_NAME = 'label'
-
     print('Your lights:')
     for i in range(len(lightsJson)):
         print(i, ': ', lightsJson[i].get(LIGHT_NAME), sep="")
@@ -20,7 +20,13 @@ def build_payload():
     return payload
 
 def main():
-    tokenfile = open("lifxtoken.txt", "r")
+    global tokenfile
+    if tokenfile is None:
+        try:
+            tokenfile = open("lifxtoken.txt", 'r')
+        except FileNotFoundError:
+            print('Error: unable to find token file.')
+            exit(2)
     token = tokenfile.readline()
 
     response = requests.get('https://api.lifx.com/v1/lights/all', auth=(token, ''))
@@ -49,6 +55,9 @@ if __name__=="__main__":
         elif arg == '-brightness':
             # TODO validate brightness param is (0, 1.0) 
             args[BRIGHTNESS] = argv[i + 1]
+            i += 1
+        elif arg == '--token-path':
+            tokenfile = open(argv[i + 1], 'r')
             i += 1
 
         i += 1
