@@ -18,6 +18,9 @@ def main():
     payload = build_payload(args)
 
     response = requests.put('https://api.lifx.com/v1/lights/all/state', data=payload, auth=(token, ''))
+    status_code = response.status_code
+    if status_code != 200 and status_code != 207:
+        print('HTML request error', response.status_code)
 
 if __name__=="__main__":
     argv = sys.argv[1:]
@@ -32,6 +35,10 @@ if __name__=="__main__":
         elif argv[i] == '-brightness' or argv[i] == '-b':
             # TODO validate brightness param is (0, 1.0) 
             args[BRIGHTNESS] = argv[i + 1]
+            i += 1
+        elif argv[i] == '-kelvin' or argv[i] == '-k' or argv[i] == '-temperature' or argv[i] == '-t':
+            # TODO validate kelvin param is (1500, 9000)
+            args[KELVIN] = argv[i + 1]
             i += 1
         elif argv[i] == '--list-lights':
             print_lights = True

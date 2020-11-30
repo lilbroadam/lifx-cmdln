@@ -1,6 +1,8 @@
 LIGHT_NAME = 'label'
 POWER = 'power'
 BRIGHTNESS = 'brightness'
+COLOR = 'color'
+KELVIN = 'kelvin'
 
 def read_token(tokenfile):
     if tokenfile is None:
@@ -19,6 +21,10 @@ def print_light_names(lightsJson):
 def build_payload(args):
     payload = {}
     for i in args.keys():
-        payload[i] = args.get(i)
-    
+        if i == KELVIN:
+            color = 'kelvin:' + args.get(i)
+            payload[COLOR] = color
+        else:
+            payload[i] = args.get(i)
+
     return payload
