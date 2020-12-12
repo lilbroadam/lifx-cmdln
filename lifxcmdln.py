@@ -51,7 +51,7 @@ if __name__=="__main__":
             # TODO validate brightness param is (0, 1.0) 
             i += 1
             if argv[i][0] == '+':
-                delta_params[BRIGHTNESS] = argv[i][1:] # Remove the + in the string
+                delta_params[BRIGHTNESS] = argv[i][1:] # Remove the + prefix
             elif argv[i][0] == '-':
                 delta_params[BRIGHTNESS] = argv[i]
             else:
@@ -59,7 +59,13 @@ if __name__=="__main__":
         elif argv[i] == '-kelvin' or argv[i] == '-k' or argv[i] == '-temperature' or argv[i] == '-t':
             # TODO validate kelvin param is (1500, 9000)
             i += 1
-            cmdln_args[KELVIN] = argv[i]
+            kelvin = argv[i]
+            if kelvin[0] == '+':
+                delta_params[KELVIN] = kelvin[1:] # Remove the + prefix
+            elif kelvin[0] == '-':
+                delta_params[KELVIN] = kelvin
+            else:
+                cmdln_args[KELVIN] = argv[i]
         elif argv[i] == '--list-lights':
             print_lights = True
         elif argv[i] == '--token-path':
