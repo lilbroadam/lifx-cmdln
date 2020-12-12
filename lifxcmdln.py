@@ -5,35 +5,28 @@ from lifxutil import *
 
 print_lights = False
 tokenfile = None
-cmdln_args = {} # rename to state_params
-
-delta_params = {} # Parameters for the /state/delta API request
+state_params = {} # Parameters for the /state API request
+delta_params = {} # Parameters for the /delta API request
 
 
 def main():
     token = read_token(tokenfile)
 
+    # Print the user's lights form /lights/:all
     if print_lights:
-        # Get a list of the user's lights from /lights/:all
         response = requests.get('https://api.lifx.com/v1/lights/all', auth=(token, ''))
         light_list = response.json()
         print_light_names(light_list)
 
-    # Handle state params
-    if len(cmdln_args) != 0:
-        payload = build_state_payload(cmdln_args)
-
-        # Send the /state API request with the pararmeters from the command line
+    # Send the /state API request with the pararmeters from the command line
+    if len(state_params) != 0:
+        payload = build_state_payload(state_params)
         response = requests.put('https://api.lifx.com/v1/lights/all/state', data=payload, auth=(token, ''))
         print_if_request_error(response)
-    
 
-    # Handle delta params
-    # Send the /state API request with the pararmeters from the command line
+    # Send the /delta API request with the pararmeters from the command line
     if len(delta_params) != 0:
-        # payload = build_delta_payload(delta_params)
-        payload = delta_params
-        response = requests.post('https://api.lifx.com/v1/lights/all/state/delta', data=payload, auth=(token, ''))
+        response = requests.post('https://api.lifx.com/v1/lights/all/state/delta', data=delta_params, auth=(token, ''))
         print_if_request_error(response)
 
 
@@ -46,7 +39,7 @@ if __name__=="__main__":
                 print('Incorrect command line arguments')
                 sys.exit(2)
             i += 1
-            cmdln_args[POWER] = argv[i]
+            state_params[POWER] = argv[i]
         elif argv[i] == '-brightness' or argv[i] == '-b':
             # TODO validate brightness param is (0, 1.0) 
             i += 1
@@ -55,7 +48,7 @@ if __name__=="__main__":
             elif argv[i][0] == '-':
                 delta_params[BRIGHTNESS] = argv[i]
             else:
-                cmdln_args[BRIGHTNESS] = argv[i]
+                state_params[BRIGHTNESS] = argv[i]
         elif argv[i] == '-kelvin' or argv[i] == '-k' or argv[i] == '-temperature' or argv[i] == '-t':
             # TODO validate kelvin param is (1500, 9000)
             i += 1
@@ -65,7 +58,7 @@ if __name__=="__main__":
             elif kelvin[0] == '-':
                 delta_params[KELVIN] = kelvin
             else:
-                cmdln_args[KELVIN] = argv[i]
+                state_params[KELVIN] = kelvin
         elif argv[i] == '--list-lights':
             print_lights = True
         elif argv[i] == '--token-path':

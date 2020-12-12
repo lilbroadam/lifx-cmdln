@@ -23,24 +23,8 @@ def print_light_names(lightsJson):
     for i in range(len(lightsJson)):
         print(i, ': ', lightsJson[i].get(LIGHT_NAME), sep="")
 
-# Format the JSON payload for the /delta api request
-# args is a dictionary of the delta to be set (setting -> delta)
-def build_delta_payload(args):
-    payload = {}
-    for i in args.keys():
-        # if i == KELVIN:
-        #     color = KELVIN + ':' + args.get(i)
-        #     payload[COLOR] = color
-        # else:
-        #     payload[i] = args.get(i)
-
-        if i == BRIGHTNESS:
-            # brightness = BRIGHTNESS + ': ' + args.get(i)
-            payload[BRIGHTNESS] = args.get(i)
-    
-    return payload
-
-# Format the JSON payload for the /state api request
+# Format the JSON payload for the /state api request. This function
+# is primarily for formatting the color parameter correctly.
 # args is a dictionary of the state to be set (setting -> value)
 def build_state_payload(args):
     payload = {}
@@ -48,6 +32,8 @@ def build_state_payload(args):
         if i == KELVIN:
             color = KELVIN + ':' + args.get(i)
             payload[COLOR] = color
+        # TODO elif HUE
+        # TODO elif SATURATION
         else:
             payload[i] = args.get(i)
 
@@ -58,4 +44,4 @@ def print_if_request_error(response):
     status_code = response.status_code
     if status_code != 200 and status_code != 207:
         print('HTML request error', response.status_code)
-        print(response.text) # Add a -debug flag to print this
+        print(response.text) # TODO Add a -debug flag to print this
