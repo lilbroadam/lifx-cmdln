@@ -59,7 +59,7 @@ if __name__=="__main__":
                 delta_params[KELVIN] = kelvin
             else:
                 state_params[KELVIN] = kelvin
-        elif argv[i] == '--list-lights':
+        elif argv[i] == '--list-lights' or argv[i] == '--show':
             print_lights = True
         elif argv[i] == '--token-path':
             i += 1

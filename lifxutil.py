@@ -21,7 +21,14 @@ def read_token(tokenfile):
 def print_light_names(lightsJson):
     print('Your lights:')
     for i in range(len(lightsJson)):
-        print(i, ': ', lightsJson[i].get(LIGHT_NAME), sep="")
+        light = lightsJson[i]
+        light_name = light.get(LIGHT_NAME)
+        power = light.get(POWER)
+        brightness = str(light.get(BRIGHTNESS)) + '%'
+        color = light.get(COLOR)
+        kelvin = str(color.get(KELVIN)) + 'K'
+        light_formatted = '{0}: {1:<13} {2:<4} {3:<6} {4}'.format(i, light_name, power, brightness, kelvin)
+        print(light_formatted, sep="")
 
 # Format the JSON payload for the /state api request. This function
 # is primarily for formatting the color parameter correctly.
