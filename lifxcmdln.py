@@ -35,20 +35,21 @@ if __name__=="__main__":
     i = 0
     while i < len(argv):
         if argv[i] == '-power' or argv[i] == '-p':
-            if argv[i + 1] != 'on' and argv[i + 1] != 'off':
+            i += 1
+            if argv[i] != 'on' and argv[i] != 'off':
                 print('Incorrect command line arguments')
                 sys.exit(2)
-            i += 1
             state_params[POWER] = argv[i]
         elif argv[i] == '-brightness' or argv[i] == '-b':
             # TODO validate brightness param is (0, 1.0) 
             i += 1
-            if argv[i][0] == '+':
-                delta_params[BRIGHTNESS] = argv[i][1:] # Remove the + prefix
-            elif argv[i][0] == '-':
-                delta_params[BRIGHTNESS] = argv[i]
+            brightness = argv[i]
+            if brightness[0] == '+':
+                delta_params[BRIGHTNESS] = brightness[1:] # Remove the + prefix
+            elif brightness[0] == '-':
+                delta_params[BRIGHTNESS] = brightness
             else:
-                state_params[BRIGHTNESS] = argv[i]
+                state_params[BRIGHTNESS] = brightness
         elif argv[i] == '-kelvin' or argv[i] == '-k' or argv[i] == '-temperature' or argv[i] == '-t':
             # TODO validate kelvin param is (1500, 9000)
             i += 1
@@ -63,7 +64,7 @@ if __name__=="__main__":
             print_lights = True
         elif argv[i] == '--token-path':
             i += 1
-            tokenfile = open(argv[i], 'r')
+            tokenfile = open(argv[i], 'r') # TODO handle if file not found
 
         i += 1
 
